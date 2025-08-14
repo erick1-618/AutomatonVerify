@@ -6,14 +6,18 @@
 
 <p align="center">Site para armazenamento eficiente de propriedades de software com base em autômatos celulares para funções hash.</p>
 
-<h3 style="display: flex; align-items:center; gap:10px"><img alt="topic" src="assets/loading.gif" width="20px" height="20px">Funcionalidades</h3>
+<h3>
+  <img src="assets/loading.gif" width="20" height="20" style="vertical-align: middle;"> Funcionalidades
+</h3>
 
 - Criação de títulos (arquivos) públicos para armazenamento de hashes
 - Verificação de integridade de títulos registrados com base nos hashes
 - Barra de pesquisa para busca
 - Favoritar títulos para fácil acesso
 
-<h3 style="display: flex; align-items:center; gap:10px"><img alt="topic" src="assets/loading.gif" width="20px" height="20px">Tecnologias utilizadas</h3>
+<h3>
+  <img src="assets/loading.gif" width="20" height="20" style="vertical-align: middle;"> Tecnologias Utilizadas
+</h3>
 
 - Frontend
     - React
@@ -31,7 +35,9 @@
     - Figma para prototipação de telas
     - JWT para autenticação de usuários
 
-<h3 style="display: flex; align-items:center; gap:10px"><img alt="topic" src="assets/loading.gif" width="20px" height="20px">Instalação e Execução</h3>
+<h3>
+  <img src="assets/loading.gif" width="20" height="20" style="vertical-align: middle;"> Instalação e Execução
+</h3>
 
 Pré-requisito: Docker (versão mínima 20.x)
 
@@ -71,7 +77,9 @@ docker compose down
 
 Para reiniciar o contêiner, reexecute o passo 3
 
-<h3 style="display: flex; align-items:center; gap:10px"><img alt="topic" src="assets/loading.gif" width="20px" height="20px">Estrutura de pastas</h3>
+<h3>
+  <img src="assets/loading.gif" width="20" height="20" style="vertical-align: middle;"> Estrutura de pastas
+</h3>
 
 ```bash
 project/
@@ -82,10 +90,12 @@ project/
 └── README.md
 ```
 
-<h3 style="display: flex; align-items:center; gap:10px"><img alt="topic" src="assets/loading.gif" width="20px" height="20px">Licença</h3>
+<h3>
+  <img src="assets/loading.gif" width="20" height="20" style="vertical-align: middle;"> Licença
+</h3>
 
 Este projeto está licenciado sob a GNU General Public License v3.0 - veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 <p align="center">
-    <img src="/assets/loading2.gif" alt="loading" width="200px" style="background-color: #ddeaf6; border-radius: 15px; margin: 15px">
+    <img src="assets/loading2.gif" width="200">
 </p>
