@@ -1,0 +1,26 @@
+.homeFeature {
+    font-family: 'Hank Grotesk', sans-serif;
+    display: flex;
+    flex-direction: column;
+    width: 75vw;
+    margin-top: 35px;
+}
+
+.name {
+    font-weight: 600;
+    letter-spacing: 1px;
+    font-style: italic;
+}
+
+.box {
+    margin-top: 15px;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    background: #7395a7;
+    padding: 20px;
+    gap: 25px;
+    overflow-x: auto;
+    border-radius: 25px;
+    filter: drop-shadow(1px 2px 6px rgba(0, 0, 0, 0.4));
+}

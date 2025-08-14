@@ -1,0 +1,77 @@
+.header{
+    display: flex;
+    background-color: #142933;
+    justify-content: space-between;
+    padding: 0 20px;
+    color: white;
+    text-align: center;
+    font-size: 20px;
+    margin: 0;
+    width: 100vw;
+    left: 0;
+    top: 0;
+    height: 60px;
+    font-weight: 900;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-family: 'Hank Grotesk', sans-serif;
+}
+
+.cad {
+    margin-top: 15px;
+    color: white;
+    cursor: pointer;
+}
+
+.cad:hover{
+    filter: drop-shadow(1px 1px 6px rgba(255, 249, 249, 0.4));
+}
+
+.log {
+    margin-left: 20px;
+    color: white;
+    text-decoration: none;
+}
+
+.log:hover{
+    filter: drop-shadow(1px 1px 6px rgba(255, 249, 249, 0.4));
+}
+
+.userIcon {
+    width: 30px;
+    height: 30px;
+    margin-left: 10px;
+    margin-top: 0px;
+}
+
+.rightGroup {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.createButton {
+    width: 40px;
+    height: 40px;
+    margin-left: 10px;
+    margin-top: 0px;
+    margin-right: 10px;
+}
+
+.createButton:hover{
+    filter: drop-shadow(1px 1px 6px rgba(255, 249, 249, 0.4));
+}
+
+.exit:hover{
+    filter: drop-shadow(1px 1px 6px rgba(255, 249, 249, 0.4));
+}
+
+.profile:hover{
+    filter: drop-shadow(1px 1px 6px rgba(255, 249, 249, 0.4));
+}
+
+.rightGroup > p:first-child{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 30vw;
+}

@@ -1,0 +1,182 @@
+.page {
+    font-family: 'Hank Grotesk', sans-serif;
+    flex: 1;
+    background: #F1F6FF;
+    width: 100vw;
+}
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.logo {
+    position: absolute;
+    width: 10vw;
+    height: 10vw;
+    margin-left: 15px;
+    margin-top: 15px;
+    margin-right: 10vw;
+    filter: drop-shadow(1px 2px 6px rgba(0, 0, 0, 0.4));
+}
+
+.box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+    width: 70vw;
+    position: relative;
+    margin-top: 100px;
+    margin-bottom: 100px;
+    background: #7395a7;
+    filter: drop-shadow(1px 2px 6px rgba(0, 0, 0, 0.4));
+    border-radius: 25px;
+}
+
+.boxName {
+    display: flex;
+    flex-direction: row;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.field {
+    margin-top: 35px;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.fieldName {
+    margin-left: 25px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.fieldContent {
+    font-family: 'Hank Grotesk', sans-serif;
+    resize: none;
+    text-overflow: ellipsis;
+    border: 0;
+    width: 100%;
+    margin-top: 15px;
+    background: #F1F6FF;
+    border-radius: 10px;
+    padding: 15px;
+    height: auto;
+    overflow-y: auto;
+    text-align: justify;
+}
+
+.desc {
+    resize: none;
+    text-overflow: ellipsis;
+    border: 0;
+    width: 100%;
+    margin-top: 15px;
+    background: #F1F6FF;
+    border-radius: 10px;
+    padding: 15px;
+    height: 300px;
+    overflow-y: auto;
+    text-align: justify;
+}
+
+.file {
+    background: #F1F6FF;
+    border-radius: 25px;
+    margin-top: 25px;
+    align-self: center;
+    width: 90%;
+    cursor: pointer;
+}
+
+.btn {
+    width: fit-content;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 40px;
+    padding-left: 40px;
+    margin-top:35px;
+    border-radius: 25px;
+    border: 0;
+    align-self: center;
+}
+
+.btn:hover {
+    background: #a4b3cf;
+    cursor: pointer;
+}
+
+.itemWrapper {
+    font-family: 'Hank Grotesk', sans-serif;
+    flex: 1;
+    background: #F1F6FF;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.loader {
+    width: 250px;
+    background: #7395a7;
+    padding: 5px;
+    border-radius: 15px;
+    margin-top: 15px;
+    filter: drop-shadow(1px 2px 6px rgba(0, 0, 0, 0.4));
+}
+
+.result {
+    color: white;
+    font-weight: bolder;
+    border-radius: 1cap;
+    background: #851b1b;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    padding-right: 20px;
+    padding-left: 20px;
+    width: 70vw;
+    text-align: center;
+}
+
+.msgWrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    width: 80vw;
+    height: auto;
+}
+
+.logotype {
+    width: 200px;
+    filter: drop-shadow(1px 2px 6px rgba(0, 0, 0, 0.4));
+}
+
+.msg {
+    text-align: left;
+    font-size: 45px;
+    font-weight: 900;
+}
+
+.backBtn {
+    font-weight: bold;
+    width: fit-content;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 40px;
+    padding-left: 40px;
+    margin-top:35px;
+    border-radius: 25px;
+    border: none;
+    align-self: center;
+    filter: drop-shadow(1px 2px 6px rgba(0, 0, 0, 0.4));
+}
+
+.backBtn:hover {
+    background: #a4b3cf;
+    cursor: pointer;
+}  

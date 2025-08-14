@@ -1,0 +1,32 @@
+.titleSearch {
+    display: flex;
+    background: #7395a7;
+    width: 70vw;
+    justify-content: space-between;
+    margin: 10px;
+    
+    padding: 5px 20px;
+    border-radius: 15px;
+}
+
+.titleSearch > p {
+    cursor: pointer;
+}
+
+.titleSearch > p:first-child {
+    max-width: 70%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.titleSearch > p:last-child {
+    max-width: 30%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.titleSearch > p:hover {
+    text-decoration: underline;
+}

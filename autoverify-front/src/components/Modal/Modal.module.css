@@ -1,0 +1,46 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal {
+    font-weight: bold;
+    gap: 15px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: white;
+    background-color: #142933;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 90%;
+    font-family: 'Hank Grotesk', sans-serif;
+}
+
+.actions {
+    display: flex;
+    justify-content: center;
+    gap: 10vw;
+}
+
+.actions > button {
+    padding: 5px 20px;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+}
+
+.actions > button:hover {
+    background: #94bccf;
+}
