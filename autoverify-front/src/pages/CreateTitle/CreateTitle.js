@@ -1,39 +1,59 @@
 import style from './CreateTitle.module.css';
-import logotype from '../../assets/icons/logotype.png'
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom'
-import loadingGif from '../../assets/loading2.gif'
+import logotype from '../../assets/icons/logotype.png';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import loadingGif from '../../assets/loading2.gif';
 import { useDispatch } from 'react-redux';
 import { expire } from '../../redux/expireSlice';
 import { API_URL } from '../../services/api';
 
-function CreateTitle() {
+function formatFileSize(bytes) {
+    if (!bytes || bytes === 0) return '0 B';
+    const k = 1024;
+    const sizes = ['B', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+}
 
+function CreateTitle() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const [name, setName] = useState('');
     const [desc, setDesc] = useState('');
+    const [selectedFile, setSelectedFile] = useState(null);
     const [loading, setLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState('');
 
-    function handleSubmit() {
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            navigate('/login');
+        }
+    }, [navigate]);
 
-        const token = localStorage.getItem("token");        
-        const fileInput = document.getElementById("file");
-        const file = fileInput ? fileInput.files[0] : null;
+    function handleFileChange(e) {
+        const file = e.target.files && e.target.files[0] ? e.target.files[0] : null;
+        setSelectedFile(file);
+        setErrorMsg('');
+    }
 
-        if(!name.trim() || !desc.trim()){
+    function handleSubmit(e) {
+        if (e) e.preventDefault();
+
+        const token = localStorage.getItem("token");
+
+        if (!name.trim() || !desc.trim()) {
             setErrorMsg("Por favor, preencha o nome e a descrição do título.");
             return;
         }
 
-        if(!file) {
+        if (!selectedFile) {
             setErrorMsg("Por favor, selecione o arquivo para gerar o hash.");
             return;
         }
 
-        if (file.size > 50 * 1024 * 1024) {
+        if (selectedFile.size > 50 * 1024 * 1024) {
             setErrorMsg("Arquivo muito grande! Tamanho máximo permitido: 50MB");
             return;
         }
@@ -41,10 +61,10 @@ function CreateTitle() {
         setErrorMsg('');
         setLoading(true);
 
-        const details = {titleName: name.trim(), titleDescription: desc.trim()};
+        const details = { titleName: name.trim(), titleDescription: desc.trim() };
 
         const formData = new FormData();
-        formData.append("file", file);
+        formData.append("file", selectedFile);
         formData.append("details", new Blob(
             [JSON.stringify(details)],
             { type: "application/json" }
@@ -57,14 +77,14 @@ function CreateTitle() {
             },
             body: formData
         }).then((res) => {
-            if(res.status === 413){
+            if (res.status === 413) {
                 throw new Error("Tamanho máximo de arquivo excedido (50MB)");
             }
-            if(res.status === 403){
-                dispatch(expire())
+            if (res.status === 403) {
+                dispatch(expire());
                 throw new Error("Sessão expirou. Faça login novamente.");
             }
-            if(!res.ok){
+            if (!res.ok) {
                 throw new Error("Erro ao criar o título");
             }
             return res.json();
@@ -79,9 +99,9 @@ function CreateTitle() {
     return (
         <div className={style.createTitle}>
             <div className={style.wrapper}>
-                <div className={style.box}>
+                <form className={style.box} onSubmit={handleSubmit}>
                     <div className={style.headerRow}>
-                        <img src={logotype} alt='Logo' className={style.logo}></img>
+                        <img src={logotype} alt='Logo' className={style.logo} />
                         <p className={style.title}>Criar Título</p>
                     </div>
 
@@ -124,24 +144,30 @@ function CreateTitle() {
                             className={style.file} 
                             type="file" 
                             disabled={loading}
-                            onChange={() => setErrorMsg('')}
+                            onChange={handleFileChange}
                         />
+                        {selectedFile && (
+                            <div className={style.selectedFileBadge}>
+                                <span className={style.fileName}>📄 {selectedFile.name}</span>
+                                <span className={style.fileSize}>({formatFileSize(selectedFile.size)})</span>
+                            </div>
+                        )}
                     </div>
 
                     <div className={style.actionArea}>
                         {loading ? (
                             <div className={style.loaderBox}>
-                                <img alt='loading' src={loadingGif} className={style.loader}></img>
+                                <img alt='loading' src={loadingGif} className={style.loader} />
                                 <p className={style.loadingText}>Processando autômato e enviando...</p>
                             </div>
                         ) : (
-                            <button className={style.button} onClick={handleSubmit}>Criar</button>
+                            <button className={style.button} type="submit">Criar</button>
                         )}
                     </div>
-                </div>
+                </form>
             </div>
         </div>
-    )
+    );
 }
 
 export default CreateTitle;

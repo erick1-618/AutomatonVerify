@@ -1,26 +1,27 @@
 import style from './Login.module.css';
 import logo from '../../assets/icons/logotype.png';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { login } from '../../redux/authSlice';
 import { getUserName } from '../../utils/utilitaries';
 import { API_URL } from '../../services/api';
 
 function Login() {
-
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const location = useLocation();
 
     const [user, setUser] = useState('');
     const [pass, setPass] = useState('');
+    const [showPass, setShowPass] = useState(false);
     const [loading, setLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState('');
 
-    async function submit(e){
+    async function submit(e) {
         if (e) e.preventDefault();
 
-        if(!user.trim() || !pass){
+        if (!user.trim() || !pass) {
             setErrorMsg("Preencha usuário e senha.");
             return;
         }
@@ -28,35 +29,36 @@ function Login() {
         setErrorMsg('');
         setLoading(true);
 
-        const loginCredentials = {userName: user.trim(), password: pass};
+        const loginCredentials = { userName: user.trim(), password: pass };
 
-        try{
+        try {
             const response = await fetch(`${API_URL}/auth/login`, {
                 body: JSON.stringify(loginCredentials),
                 method: "POST",
-                headers: {"Content-Type": "application/json"}
+                headers: { "Content-Type": "application/json" }
             });
 
-            if(response.status === 403 || response.status === 401){
+            if (response.status === 403 || response.status === 401) {
                 setErrorMsg("Nome de usuário ou senha inválidos.");
                 setPass('');
                 setLoading(false);
                 return;
             }
 
-            if(!response.ok){
+            if (!response.ok) {
                 setErrorMsg("Não foi possível realizar o seu login.");
                 setLoading(false);
                 return;
-            }            
-        
+            }
+
             const data = await response.json();
             const name = getUserName(data.token);
 
-            dispatch(login({token: data.token, name}));
-            navigate('/home')
+            dispatch(login({ token: data.token, name }));
+            const destination = location.state?.from?.pathname || '/home';
+            navigate(destination, { replace: true });
 
-        }catch(error){
+        } catch (error) {
             setErrorMsg(`Erro de conexão: ${error.message || error}`);
             setLoading(false);
         }
@@ -86,16 +88,26 @@ function Login() {
 
                 <div className={style.fields}>
                     <p className={style.label}>Senha</p>
-                    <input 
-                        className={style.input} 
-                        type='password' 
-                        value={pass} 
-                        onChange={(e) => {
-                            setPass(e.target.value);
-                            setErrorMsg('');
-                        }}
-                        disabled={loading}
-                    />
+                    <div className={style.passwordWrapper}>
+                        <input 
+                            className={style.passwordInput} 
+                            type={showPass ? 'text' : 'password'} 
+                            value={pass} 
+                            onChange={(e) => {
+                                setPass(e.target.value);
+                                setErrorMsg('');
+                            }}
+                            disabled={loading}
+                        />
+                        <button 
+                            type="button" 
+                            className={style.passwordToggle} 
+                            onClick={() => setShowPass(!showPass)}
+                            title={showPass ? "Ocultar senha" : "Ver senha"}
+                        >
+                            {showPass ? "👁️‍🗨️" : "👁️"}
+                        </button>
+                    </div>
                 </div>
 
                 <button className={style.btn} type="submit" disabled={loading}>
@@ -107,7 +119,7 @@ function Login() {
                 </p>
             </form>
         </div>
-    )
+    );
 }
 
 export default Login;

@@ -113,6 +113,31 @@
     border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
+.selectedFileBadge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(20, 41, 51, 0.4);
+    padding: 6px 14px;
+    border-radius: 12px;
+    margin-top: 6px;
+    font-size: 13px;
+    max-width: fit-content;
+}
+
+.fileName {
+    font-weight: 700;
+    color: white;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.fileSize {
+    color: rgba(255, 255, 255, 0.75);
+    font-weight: 500;
+}
+
 .actionArea {
     display: flex;
     justify-content: center;

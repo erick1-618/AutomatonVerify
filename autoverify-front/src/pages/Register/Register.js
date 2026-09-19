@@ -11,6 +11,8 @@ function Register() {
     const [user, setUser] = useState('');
     const [pass, setPass] = useState('');
     const [confPass, setConfPass] = useState('');
+    const [showPass, setShowPass] = useState(false);
+    const [showConfPass, setShowConfPass] = useState(false);
     const [loading, setLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState('');
     const [successMsg, setSuccessMsg] = useState('');
@@ -101,30 +103,50 @@ function Register() {
 
                 <div className={style.fields}>
                     <p className={style.label}>Senha</p>
-                    <input 
-                        className={style.input} 
-                        type="password" 
-                        value={pass}
-                        onChange={(e) => {
-                            setPass(e.target.value);
-                            setErrorMsg('');
-                        }}
-                        disabled={loading}
-                    />
+                    <div className={style.passwordWrapper}>
+                        <input 
+                            className={style.passwordInput} 
+                            type={showPass ? "text" : "password"} 
+                            value={pass}
+                            onChange={(e) => {
+                                setPass(e.target.value);
+                                setErrorMsg('');
+                            }}
+                            disabled={loading}
+                        />
+                        <button 
+                            type="button" 
+                            className={style.passwordToggle} 
+                            onClick={() => setShowPass(!showPass)}
+                            title={showPass ? "Ocultar senha" : "Ver senha"}
+                        >
+                            {showPass ? "👁️‍🗨️" : "👁️"}
+                        </button>
+                    </div>
                 </div>
 
                 <div className={style.fields}>
                     <p className={style.label}>Confirmar Senha</p>
-                    <input 
-                        className={style.input} 
-                        type="password" 
-                        value={confPass}
-                        onChange={(e) => {
-                            setConfPass(e.target.value);
-                            setErrorMsg('');
-                        }}
-                        disabled={loading}
-                    />
+                    <div className={style.passwordWrapper}>
+                        <input 
+                            className={style.passwordInput} 
+                            type={showConfPass ? "text" : "password"} 
+                            value={confPass}
+                            onChange={(e) => {
+                                setConfPass(e.target.value);
+                                setErrorMsg('');
+                            }}
+                            disabled={loading}
+                        />
+                        <button 
+                            type="button" 
+                            className={style.passwordToggle} 
+                            onClick={() => setShowConfPass(!showConfPass)}
+                            title={showConfPass ? "Ocultar senha" : "Ver senha"}
+                        >
+                            {showConfPass ? "👁️‍🗨️" : "👁️"}
+                        </button>
+                    </div>
                 </div>
 
                 <button className={style.btn} type="submit" disabled={loading}>
