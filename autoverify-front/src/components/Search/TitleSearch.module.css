@@ -1,79 +1,51 @@
-.resultItem {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 20px;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
-  cursor: pointer;
-  transition: all var(--transition-fast);
+.titleSearch {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #7395a7;
+    color: white;
+    width: 100%;
+    max-width: 600px;
+    margin: 8px 0;
+    padding: 14px 20px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(20, 41, 51, 0.1);
+    box-sizing: border-box;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.resultItem:hover {
-  background: var(--bg-surface-elevated);
-  border-color: var(--border-default);
-  transform: translateX(4px);
+.titleSearch:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(20, 41, 51, 0.18);
 }
 
-.resultItem:hover .actionArrow {
-  color: var(--accent-primary);
-  transform: translateX(2px);
+.name {
+    margin: 0;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 16px;
+    max-width: 65%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-.leftGroup {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  min-width: 0;
-  flex: 1;
+.name:hover {
+    text-decoration: underline;
 }
 
-.iconWrapper {
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-sm);
-  background: var(--accent-light);
-  color: var(--accent-primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+.author {
+    margin: 0;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    color: #F1F6FF;
+    max-width: 32%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-.info {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 0;
-}
-
-.titleName {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text-primary);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.authorTag {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  width: fit-content;
-  font-size: 12px;
-  color: var(--text-muted);
-  transition: color var(--transition-fast);
-}
-
-.authorTag:hover {
-  color: var(--text-primary);
-}
-
-.actionArrow {
-  color: var(--text-muted);
-  transition: all var(--transition-fast);
-  display: flex;
-  align-items: center;
+.author:hover {
+    text-decoration: underline;
 }

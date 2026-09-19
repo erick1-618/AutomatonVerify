@@ -1,78 +1,58 @@
-.searchContainer {
-  width: 100%;
+.search {
+    width: 100%;
+    max-width: 840px;
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    padding: 0 16px;
+    box-sizing: border-box;
 }
 
-.searchBar {
-  position: relative;
-  display: flex;
-  align-items: center;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-lg);
-  padding: 4px 12px 4px 16px;
-  box-shadow: var(--shadow-sm);
-  transition: all var(--transition-fast);
+.text {
+    font-weight: 700;
+    margin-left: 16px;
+    letter-spacing: 0.5px;
+    color: #142933;
+    font-size: 15px;
 }
 
-.searchBar:focus-within {
-  border-color: var(--accent-primary);
-  box-shadow: 0 0 0 3px var(--accent-light);
-  background: var(--bg-surface-elevated);
+.bar {
+    background: white;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 18px;
+    border-radius: 30px;
+    width: 100%;
+    box-shadow: 0 4px 14px rgba(20, 41, 51, 0.12);
+    border: 1px solid rgba(20, 41, 51, 0.08);
+    margin-top: 10px;
+    transition: box-shadow 0.2s, border-color 0.2s;
 }
 
-.searchIcon {
-  color: var(--text-muted);
-  display: flex;
-  align-items: center;
-  margin-right: 12px;
+.bar:focus-within {
+    border-color: #142933;
+    box-shadow: 0 6px 18px rgba(20, 41, 51, 0.18);
 }
 
 .input {
-  flex: 1;
-  background: transparent;
-  border: none;
-  color: var(--text-primary);
-  font-size: 15px;
-  padding: 12px 0;
-  outline: none;
-  min-width: 0;
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 16px;
+    color: #142933;
+    background: transparent;
 }
 
-.input::placeholder {
-  color: var(--text-muted);
+.logo {
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    object-fit: contain;
 }
 
-.searchActionBtn {
-  background: var(--accent-primary);
-  color: #ffffff;
-  font-size: 13px;
-  font-weight: 600;
-  padding: 6px 14px;
-  border-radius: var(--radius-sm);
-  margin-right: 8px;
-  transition: all var(--transition-fast);
-}
-
-.searchActionBtn:hover {
-  background: var(--accent-hover);
-}
-
-.kbdShortcut {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 3px 8px;
-  border-radius: var(--radius-sm);
-  background: var(--bg-canvas);
-  border: 1px solid var(--border-subtle);
-  color: var(--text-muted);
-  font-size: 12px;
-  font-family: var(--font-mono);
-  user-select: none;
-}
-
-@media (max-width: 640px) {
-  .kbdShortcut {
-    display: none;
-  }
+.logo:hover {
+    transform: scale(1.15);
 }

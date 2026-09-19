@@ -1,60 +1,43 @@
-import React, { useState } from 'react';
-import styles from './Search.module.css';
+import { useState } from 'react';
+import lupe from '../../assets/icons/lupe.png'
+import style from './Search.module.css'
 import { useNavigate } from 'react-router-dom';
-import { IconSearch } from '../Common/Icons';
 
-function Search({ initialValue = '', onSearch }) {
-  const navigate = useNavigate();
-  const [search, setSearch] = useState(initialValue);
+function Search(){
 
-  function executeSearch() {
-    const trimmed = search.trim();
-    if (!trimmed) return;
+    const navigate = useNavigate();
 
-    if (onSearch) {
-      onSearch(trimmed);
-    } else {
-      navigate(`/search?q=${encodeURIComponent(trimmed)}&p=0`);
+    const [search, setSearch] = useState('');
+
+    const [byName, setByName] = useState(true);
+
+    function searchTitle(){
+
+        const trimmed = search.trim();
+
+        if(!trimmed) return;
+
+        navigate(`/search?q=${search}&p=0`)
     }
-  }
 
-  function handleKeyDown(e) {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      executeSearch();
+    function handleKeyDown(e) {
+        if (e.key === 'Enter') {
+        e.preventDefault();
+        searchTitle();
+        }
     }
-  }
 
-  return (
-    <div className={styles.searchContainer}>
-      <div className={styles.searchBar}>
-        <div className={styles.searchIcon}>
-          <IconSearch size={18} />
+    return (
+        <div className={style.search}>
+            <p className={style.text}>Pesquisar títulos:</p>
+            <div className={style.bar}>
+                <input className={style.input} value={search} onKeyDown={handleKeyDown} onChange={(e) => {
+                    setSearch(e.target.value)
+                }} type="text"></input>
+                <img className={style.logo} alt='Lupe' src={lupe} onClick={searchTitle}></img>
+            </div>
         </div>
-        <input
-          className={styles.input}
-          value={search}
-          onKeyDown={handleKeyDown}
-          onChange={(e) => setSearch(e.target.value)}
-          type="text"
-          placeholder="Pesquisar por nome do título ou software..."
-          aria-label="Pesquisar títulos"
-        />
-        {search.trim() && (
-          <button
-            type="button"
-            className={styles.searchActionBtn}
-            onClick={executeSearch}
-          >
-            Buscar
-          </button>
-        )}
-        <div className={styles.kbdShortcut} title="Pressione Enter para buscar">
-          ↵
-        </div>
-      </div>
-    </div>
-  );
+    )
 }
 
 export default Search;

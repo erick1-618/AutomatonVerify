@@ -1,180 +1,164 @@
-.createWrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  max-width: 760px;
-  margin: 0 auto;
-  gap: 28px;
+.createTitle {
+    flex: 1;
+    background: #F1F6FF;
+    width: 100%;
+    padding: 40px 16px 80px 16px;
+    box-sizing: border-box;
 }
 
-.cardHeader {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+.wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
 }
 
-.iconBadge {
-  width: 52px;
-  height: 52px;
-  border-radius: var(--radius-lg);
-  background: var(--accent-light);
-  color: var(--accent-primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 16px;
+.box {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 680px;
+    background: #7395a7;
+    box-shadow: 0 10px 30px rgba(20, 41, 51, 0.2);
+    border-radius: 28px;
+    padding: 36px 40px;
+    color: white;
+    box-sizing: border-box;
 }
 
-.heading {
-  font-size: 26px;
-  font-weight: 800;
-  color: var(--text-primary);
-  letter-spacing: -0.02em;
-  margin-bottom: 6px;
+.headerRow {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
 }
 
-.subheading {
-  font-size: 14px;
-  color: var(--text-secondary);
-  max-width: 540px;
+.logo {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.2));
 }
 
-.formCard {
-  width: 100%;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-xl);
-  padding: 36px 32px;
-  box-shadow: var(--shadow-sm);
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+.title {
+    font-size: 26px;
+    font-weight: 800;
+    color: white;
+    letter-spacing: -0.5px;
 }
 
-.fieldGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+.errorMsg {
+    background: #851b1b;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 20px;
 }
 
-.labelRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
 }
 
 .label {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.charCount {
-  font-size: 12px;
-  color: var(--text-muted);
-  font-family: var(--font-mono);
+    font-size: 15px;
+    font-weight: 700;
+    color: white;
 }
 
 .input {
-  width: 100%;
-  padding: 12px 16px;
-  background: var(--bg-canvas);
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-md);
-  color: var(--text-primary);
-  font-size: 14px;
-  transition: all var(--transition-fast);
+    background: #F1F6FF;
+    border: none;
+    outline: none;
+    border-radius: 14px;
+    padding: 12px 18px;
+    font-size: 15px;
+    color: #142933;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
 }
 
 .input:focus {
-  outline: none;
-  border-color: var(--accent-primary);
-  box-shadow: 0 0 0 3px var(--accent-light);
+    box-shadow: 0 0 0 2px #142933;
 }
 
 .textarea {
-  width: 100%;
-  padding: 12px 16px;
-  background: var(--bg-canvas);
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-md);
-  color: var(--text-primary);
-  font-size: 14px;
-  line-height: 1.6;
-  resize: vertical;
-  min-height: 120px;
-  transition: all var(--transition-fast);
+    background: #F1F6FF;
+    border: none;
+    outline: none;
+    border-radius: 14px;
+    padding: 12px 18px;
+    font-size: 14px;
+    color: #142933;
+    line-height: 1.6;
+    resize: vertical;
+    min-height: 110px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
 }
 
 .textarea:focus {
-  outline: none;
-  border-color: var(--accent-primary);
-  box-shadow: 0 0 0 3px var(--accent-light);
+    box-shadow: 0 0 0 2px #142933;
 }
 
-.actionsRow {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 16px;
-  padding-top: 12px;
-  border-top: 1px solid var(--border-subtle);
+.file {
+    background: #F1F6FF;
+    color: #142933;
+    border-radius: 20px;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.cancelBtn {
-  padding: 12px 20px;
-  border-radius: var(--radius-md);
-  background: var(--bg-canvas);
-  border: 1px solid var(--border-subtle);
-  color: var(--text-secondary);
-  font-size: 14px;
-  font-weight: 600;
-  transition: all var(--transition-fast);
+.actionArea {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
 }
 
-.cancelBtn:hover:not(:disabled) {
-  color: var(--text-primary);
-  border-color: var(--border-default);
-  background: var(--bg-surface-elevated);
+.button {
+    padding: 12px 48px;
+    background: #142933;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(20, 41, 51, 0.25);
+    transition: all 0.2s ease;
 }
 
-.submitBtn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 24px;
-  border-radius: var(--radius-md);
-  background: var(--accent-primary);
-  color: #ffffff;
-  font-size: 14px;
-  font-weight: 600;
-  box-shadow: 0 0 16px var(--accent-glow);
-  transition: all var(--transition-fast);
+.button:hover {
+    background: #0d1e26;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(20, 41, 51, 0.35);
 }
 
-.submitBtn:hover:not(:disabled) {
-  background: var(--accent-hover);
-  transform: translateY(-1px);
+.loaderBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
 }
 
-.submitBtn:disabled,
-.cancelBtn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+.loader {
+    width: 140px;
+    height: auto;
+    object-fit: contain;
+}
+
+.loadingText {
+    font-size: 14px;
+    font-weight: 700;
+    color: white;
 }
 
 @media (max-width: 640px) {
-  .formCard {
-    padding: 24px 20px;
-  }
-  .actionsRow {
-    flex-direction: column-reverse;
-  }
-  .cancelBtn,
-  .submitBtn {
-    width: 100%;
-    justify-content: center;
-  }
+    .box {
+        padding: 24px 20px;
+    }
 }

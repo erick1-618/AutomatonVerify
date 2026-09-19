@@ -1,306 +1,204 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import styles from './Title.module.css';
-import { useDispatch } from 'react-redux';
-import { expire } from '../../redux/expireSlice';
-import { API_URL } from '../../services/api';
-import { useToast } from '../../components/Common/Toast';
-import { Dropzone } from '../../components/Common/Dropzone';
-import { Skeleton } from '../../components/Common/Skeleton';
-import {
-  IconFileCode,
-  IconUser,
-  IconStar,
-  IconShieldCheck,
-  IconShieldAlert,
-  IconSpinner,
-} from '../../components/Common/Icons';
+import { useParams, useNavigate } from "react-router-dom";
+import style from './Title.module.css';
+import logo from '../../assets/icons/logotype.png';
+import starE from '../../assets/icons/star_e.png'
+import starF from '../../assets/icons/star_f.png'
+import { useEffect, useState } from "react";
+import loadingGif from '../../assets/loading.gif'
+import { useDispatch } from "react-redux";
+import { expire } from "../../redux/expireSlice";
+import { API_URL } from "../../services/api";
 
-function Title() {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { showToast } = useToast();
+function Title(){
 
-  const [title, setTitle] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+    const {id} = useParams();
+    const navigate = useNavigate();
+    const dispatch = useDispatch()
 
-  // File and Verification states
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [result, setResult] = useState(null); // 'true' | 'false' | null
-  const [resultLoading, setResultLoading] = useState(false);
+    const [title, setTitle] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
+    const [result, setResult] = useState(null);
+    const [resultLoading, setResultLoading] = useState(false);
+    const [resultError, setResultError] = useState(false);
+    const [resultBoolean, setResultBoolean] = useState(false);
+    const [fileError, setFileError] = useState('');
 
-    fetch(`${API_URL}/title/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      method: 'GET',
-    })
-      .then((res) => {
-        if (res.status === 403) {
-          dispatch(expire());
-          throw new Error('Sessão expirada');
-        }
-        if (!res.ok) {
-          throw new Error('Falha ao obter detalhes do título');
-        }
-        return res.json();
-      })
-      .then((data) => {
-        setTitle(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setLoading(false);
-        setError(true);
-        showToast(err.message || 'Erro ao carregar título', 'error');
-      });
-  }, [id, dispatch, showToast]);
+    useEffect(() => {
 
-  function handleFavorite() {
-    const token = localStorage.getItem('token');
-    if (!title) return;
+        const token = localStorage.getItem("token")
 
-    const method = title.favorited ? 'DELETE' : 'POST';
+        fetch(`${API_URL}/title/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+            method: "GET"
+        }).then((res) => {
+            if(res.status === 403){
+                dispatch(expire())
+                throw new Error("Sessão expirou")
+            }
+            return res.json()})
+        .then(data => {
+            setTitle(data);
+            setLoading(false);
+        }).catch((err) => {
+            setLoading(false);
+            setError(true);
+        })
+    }, [id, dispatch])
 
-    fetch(`${API_URL}/title/${id}/favorite`, {
-      method: method,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => {
-        if (res.status === 403) {
-          dispatch(expire());
-          throw new Error('Sessão expirada');
-        }
-        return res.json();
-      })
-      .then((data) => {
-        setTitle(data);
-        showToast(
-          data.favorited ? 'Adicionado aos favoritos!' : 'Removido dos favoritos.',
-          'info'
-        );
-      })
-      .catch((err) => {
-        showToast('Erro ao atualizar favorito', 'error');
-      });
-  }
+    function handleFavorite() {
 
-  function handleVerify() {
-    const token = localStorage.getItem('token');
+        const token = localStorage.getItem("token");
 
-    if (!selectedFile) {
-      showToast('Selecione ou arraste um arquivo para verificar.', 'error');
-      return;
+        const method = title.favorited ? "DELETE" : "POST";
+
+        fetch(`${API_URL}/title/${id}/favorite`, {
+                method: method,
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+        }).then((res) => {
+            if(res.status === 403){
+                dispatch(expire())
+                throw new Error('Sessão expirou')
+            } 
+           return res.json()})
+        .then(data => {
+            setTitle(data);
+        }).catch((err) => {
+        })
     }
 
-    if (selectedFile.size > 50 * 1024 * 1024) {
-      showToast('O arquivo excede o limite máximo permitido de 50MB.', 'error');
-      return;
+    function handleSubmit(){
+        
+        const token = localStorage.getItem("token");
+        const fileInput = document.getElementById("file");
+        const file = fileInput ? fileInput.files[0] : null;
+        
+        if(!file){
+            setFileError("Por favor, selecione um arquivo para validação!");
+            return;
+        }
+
+        setFileError('');
+        setResultLoading(true);
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        fetch(`${API_URL}/title/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+            body: formData,
+            method: "POST"
+        })
+        .then((res) => {
+            if(res.status === 403){
+                dispatch(expire())
+                throw new Error('Sessão expirou')
+            }
+            return res.json()
+        })
+        .then((data) => {
+            const hashResult = data.message[0];
+            const resultBool = hashResult === "true";
+            setResult(hashResult);
+            setResultBoolean(resultBool)
+        }).catch((err) => {
+            setResultError(true);
+        }).finally(() => {
+            setResultLoading(false)
+        })
     }
 
-    setResultLoading(true);
-    setResult(null);
-
-    const formData = new FormData();
-    formData.append('file', selectedFile);
-
-    fetch(`${API_URL}/title/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      body: formData,
-      method: 'POST',
-    })
-      .then((res) => {
-        if (res.status === 403) {
-          dispatch(expire());
-          throw new Error('Sessão expirada');
-        }
-        if (!res.ok) {
-          throw new Error('Falha ao processar arquivo para verificação');
-        }
-        return res.json();
-      })
-      .then((data) => {
-        const hashResult = data.message && data.message[0];
-        setResult(hashResult === 'true' ? 'true' : 'false');
-      })
-      .catch((err) => {
-        showToast(err.message || 'Erro durante a verificação', 'error');
-      })
-      .finally(() => {
-        setResultLoading(false);
-      });
-  }
-
-  if (loading) {
-    return (
-      <div className="page-container">
-        <div className={styles.loadingContainer}>
-          <Skeleton height="32px" width="50%" />
-          <Skeleton height="20px" width="30%" style={{ marginTop: '12px' }} />
-          <Skeleton height="200px" style={{ marginTop: '32px' }} />
-          <Skeleton height="160px" style={{ marginTop: '24px' }} />
+    if(loading) return (
+        <div className={style.centerMsg}>
+            <img alt="Carregando..." src={loadingGif} className={style.loader} />
+            <p>Carregando título...</p>
         </div>
-      </div>
     );
-  }
 
-  if (error || !title) {
-    return (
-      <div className="page-container">
-        <div className={styles.errorContainer}>
-          <div className={styles.errorIcon}>
-            <IconShieldAlert size={36} />
-          </div>
-          <h2>Título não encontrado</h2>
-          <p>O título solicitado não existe ou você não possui permissão para visualizá-lo.</p>
-          <button className={styles.backBtn} onClick={() => navigate('/home')}>
-            ← Voltar para a Home
-          </button>
+    if(error || !title) return (
+        <div className={style.centerMsg}>
+            <p>Erro ao carregar o título solicitado.</p>
+            <button className={style.btnBack} onClick={() => navigate('/home')}>Voltar à página inicial</button>
         </div>
-      </div>
     );
-  }
 
-  const formattedDate = title.creationDate
-    ? title.creationDate.substring(0, 10).split('-').reverse().join('/')
-    : 'Data desconhecida';
+    return (
+        <div className={style.title}>
+            <div className={style.wrapper}>   
+                <div className={style.box}>
+                    <div className={style.topBrandRow}>
+                        <img src={logo} alt="Logo" className={style.logo}></img>
+                        <div className={style.info}>
+                            <p className={style.titleHeading}>{title.titleName}</p>
+                            <p className={style.authorHeading} onClick={() => navigate(`/user/${title.author}`)}>
+                                /{title.author}
+                            </p>
+                        </div>
+                    </div>
 
-  return (
-    <div className="page-container">
-      <div className={styles.titlePage}>
-        {/* Navigation back */}
-        <button className={styles.breadcrumbBtn} onClick={() => navigate(-1)}>
-          ← Voltar
-        </button>
+                    <div className={style.extrainfo}>
+                        <p>Criado em: {title.creationDate ? title.creationDate.substring(0, 10).replaceAll('-', '/') : ''}</p>
+                        <div className={style.fav}>
+                            <p>{title.favoriteCount}</p>
+                            <img alt="star" src={title.favorited ? starF : starE} className={style.star} onClick={handleFavorite}></img>
+                        </div>
+                    </div>
 
-        {/* Main Card */}
-        <div className={styles.detailsCard}>
-          {/* Header Info */}
-          <div className={styles.cardTop}>
-            <div className={styles.titleHeaderGroup}>
-              <div className={styles.typeBadge}>
-                <IconFileCode size={20} />
-              </div>
-              <div>
-                <h1 className={styles.titleHeading}>{title.titleName}</h1>
-                <div className={styles.metaRow}>
-                  <div
-                    className={styles.authorTag}
-                    onClick={() => navigate(`/user/${title.author}`)}
-                    title={`Ver perfil de ${title.author}`}
-                  >
-                    <IconUser size={13} />
-                    <span>{title.author}</span>
-                  </div>
-                  <span className={styles.bullet}>•</span>
-                  <span className={styles.dateTag}>Criado em {formattedDate}</span>
+                    <div className={style.description}>
+                        <p className={style.descName}>Descrição</p>
+                        <p className={style.descContent}>{title.titleDescription}</p>
+                    </div>
+
+                    <div className={style.integrity}>
+                        <p className={style.integrityTitle}>Verifique a integridade</p>
+                        <div className={style.fileWrapper}>
+                            <input 
+                                id="file" 
+                                className={style.file} 
+                                type="file" 
+                                onChange={() => {
+                                    setResult(null);
+                                    setResultLoading(false);
+                                    setResultError(false);
+                                    setFileError('');
+                                }} 
+                            />
+                        </div>
+
+                        {fileError && <p className={style.fileErrorMsg}>{fileError}</p>}
+
+                        <button className={style.btn} onClick={handleSubmit} disabled={resultLoading}>
+                            {resultLoading ? 'Verificando...' : 'Verificar'}
+                        </button>
+                    </div>
+
+                    {resultLoading && (
+                        <div className={style.loaderBox}>
+                            <img alt='loading' src={loadingGif} className={style.loader}></img>
+                            <p className={style.calculatingText}>Calculando hash por autômatos celulares...</p>
+                        </div>
+                    )}
+
+                    {!resultLoading && result && (
+                        resultBoolean ?
+                        <p className={`${style.result} ${style.ok}`}>✓ Integridade Verificada</p>
+                        : <p className={`${style.result} ${style.fail}`}>✗ Integridade Comprometida</p>
+                    )}
+
+                    {resultError && !resultLoading && (
+                        <p className={`${style.result} ${style.fail}`}>Erro ao processar verificação</p>
+                    )}
                 </div>
-              </div>
             </div>
-
-            {/* Favorite Action */}
-            <button
-              className={`${styles.favBtn} ${title.favorited ? styles.isFavorited : ''}`}
-              onClick={handleFavorite}
-              title={title.favorited ? 'Remover dos favoritos' : 'Favoritar título'}
-            >
-              <IconStar size={16} filled={title.favorited} />
-              <span className={styles.favCount}>{title.favoriteCount || 0}</span>
-            </button>
-          </div>
-
-          {/* Description Section */}
-          <div className={styles.descriptionSection}>
-            <h3 className={styles.sectionLabel}>Descrição e Especificações</h3>
-            <div className={styles.descriptionContent}>
-              <p>{title.titleDescription || 'Nenhuma descrição detalhada fornecida.'}</p>
-            </div>
-          </div>
-
-          {/* Integrity Verification Zone */}
-          <div className={styles.verificationSection}>
-            <div className={styles.verifyHeader}>
-              <h3 className={styles.verifyTitle}>Auditoria de Integridade</h3>
-              <p className={styles.verifySubtitle}>
-                Submeta o arquivo para confrontar sua estrutura contra o hash gerado pelo autômato celular.
-              </p>
-            </div>
-
-            <div className={styles.dropzoneWrapper}>
-              <Dropzone
-                file={selectedFile}
-                onFileSelect={(file) => {
-                  setSelectedFile(file);
-                  setResult(null);
-                }}
-                label="Selecione o arquivo correspondente para auditar a integridade"
-              />
-            </div>
-
-            {selectedFile && (
-              <div className={styles.actionRow}>
-                <button
-                  className={styles.verifyActionBtn}
-                  onClick={handleVerify}
-                  disabled={resultLoading}
-                >
-                  {resultLoading ? (
-                    <>
-                      <IconSpinner size={18} />
-                      <span>Processando hash por autômatos celulares...</span>
-                    </>
-                  ) : (
-                    <>
-                      <IconShieldCheck size={18} />
-                      <span>Verificar Integridade</span>
-                    </>
-                  )}
-                </button>
-              </div>
-            )}
-
-            {/* Result Banners */}
-            {result && (
-              <div
-                className={`${styles.resultBanner} ${
-                  result === 'true' ? styles.resultSuccess : styles.resultFailed
-                }`}
-              >
-                <div className={styles.resultIcon}>
-                  {result === 'true' ? (
-                    <IconShieldCheck size={28} />
-                  ) : (
-                    <IconShieldAlert size={28} />
-                  )}
-                </div>
-                <div className={styles.resultTextGroup}>
-                  <h4 className={styles.resultTitle}>
-                    {result === 'true'
-                      ? 'Integridade Verificada com Sucesso'
-                      : 'Integridade Comprometida ou Divergente'}
-                  </h4>
-                  <p className={styles.resultDescription}>
-                    {result === 'true'
-                      ? 'O arquivo fornecido coincide rigorosamente com a assinatura criptográfica registrada. Nenhuma alteração de bit ou corrupção foi detectada.'
-                      : 'Atenção: o hash calculado a partir do arquivo submetido não corresponde à assinatura registrada. O arquivo pode ter sido modificado, corrompido ou não ser a versão original.'}
-                  </p>
-                </div>
-              </div>
-            )}
-          </div>
         </div>
-      </div>
-    </div>
-  );
+    )
 }
 
 export default Title;

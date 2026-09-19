@@ -1,147 +1,113 @@
-import React, { useState } from 'react';
-import styles from './Login.module.css';
-import { useNavigate, Link } from 'react-router-dom';
+import style from './Login.module.css';
+import logo from '../../assets/icons/logotype.png';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { login } from '../../redux/authSlice';
 import { getUserName } from '../../utils/utilitaries';
 import { API_URL } from '../../services/api';
-import { useToast } from '../../components/Common/Toast';
-import { IconUser, IconLock, IconSpinner, IconGridAutomata } from '../../components/Common/Icons';
 
 function Login() {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { showToast } = useToast();
 
-  const [user, setUser] = useState('');
-  const [pass, setPass] = useState('');
-  const [loading, setLoading] = useState(false);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-  async function handleSubmit(e) {
-    e.preventDefault();
+    const [user, setUser] = useState('');
+    const [pass, setPass] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [errorMsg, setErrorMsg] = useState('');
 
-    if (!user.trim() || !pass.trim()) {
-      showToast('Por favor, preencha o usuário e a senha.', 'error');
-      return;
+    async function submit(e){
+        if (e) e.preventDefault();
+
+        if(!user.trim() || !pass){
+            setErrorMsg("Preencha usuário e senha.");
+            return;
+        }
+
+        setErrorMsg('');
+        setLoading(true);
+
+        const loginCredentials = {userName: user.trim(), password: pass};
+
+        try{
+            const response = await fetch(`${API_URL}/auth/login`, {
+                body: JSON.stringify(loginCredentials),
+                method: "POST",
+                headers: {"Content-Type": "application/json"}
+            });
+
+            if(response.status === 403 || response.status === 401){
+                setErrorMsg("Nome de usuário ou senha inválidos.");
+                setPass('');
+                setLoading(false);
+                return;
+            }
+
+            if(!response.ok){
+                setErrorMsg("Não foi possível realizar o seu login.");
+                setLoading(false);
+                return;
+            }            
+        
+            const data = await response.json();
+            const name = getUserName(data.token);
+
+            dispatch(login({token: data.token, name}));
+            navigate('/home')
+
+        }catch(error){
+            setErrorMsg(`Erro de conexão: ${error.message || error}`);
+            setLoading(false);
+        }
     }
 
-    setLoading(true);
+    return (
+        <div className={style.login}>
+            <form className={style.box} onSubmit={submit}>
+                <img className={style.logo} alt="Logo" src={logo} />
+                <p className={style.title}>Entrar</p>
 
-    try {
-      const response = await fetch(`${API_URL}/auth/login`, {
-        body: JSON.stringify({ userName: user.trim(), password: pass }),
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-      });
+                {errorMsg && <p className={style.errorMsg}>{errorMsg}</p>}
 
-      if (response.status === 403 || response.status === 401) {
-        showToast('Usuário ou senha inválidos.', 'error');
-        setLoading(false);
-        return;
-      }
+                <div className={style.fields}>
+                    <p className={style.label}>Usuário</p>
+                    <input 
+                        className={style.input} 
+                        type='text' 
+                        value={user} 
+                        onChange={(e) => {
+                            setUser(e.target.value);
+                            setErrorMsg('');
+                        }}
+                        disabled={loading}
+                    />
+                </div>
 
-      if (!response.ok) {
-        showToast('Não foi possível realizar o login. Tente novamente mais tarde.', 'error');
-        setLoading(false);
-        return;
-      }
+                <div className={style.fields}>
+                    <p className={style.label}>Senha</p>
+                    <input 
+                        className={style.input} 
+                        type='password' 
+                        value={pass} 
+                        onChange={(e) => {
+                            setPass(e.target.value);
+                            setErrorMsg('');
+                        }}
+                        disabled={loading}
+                    />
+                </div>
 
-      const data = await response.json();
-      const name = getUserName(data.token);
+                <button className={style.btn} type="submit" disabled={loading}>
+                    {loading ? 'Entrando...' : 'Entrar'}
+                </button>
 
-      dispatch(login({ token: data.token, name }));
-      showToast(`Bem-vindo de volta, ${name}!`, 'success');
-      navigate('/home');
-    } catch (error) {
-      showToast(`Erro de conexão com o servidor: ${error.message || error}`, 'error');
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  return (
-    <div className={styles.loginWrapper}>
-      <div className={styles.loginCard}>
-        <div className={styles.cardHeader}>
-          <div className={styles.logoBadge}>
-            <IconGridAutomata size={22} />
-          </div>
-          <h2 className={styles.title}>Entrar na sua conta</h2>
-          <p className={styles.subtitle}>
-            Acesse o AutomatonVerify para gerenciar e validar seus títulos
-          </p>
+                <p className={style.register}>
+                    Não possui uma conta? <span onClick={() => navigate('/register')}>Cadastre-se</span>
+                </p>
+            </form>
         </div>
-
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <div className={styles.fieldGroup}>
-            <label className={styles.label} htmlFor="username">
-              Nome de Usuário
-            </label>
-            <div className={styles.inputWrapper}>
-              <div className={styles.fieldIcon}>
-                <IconUser size={16} />
-              </div>
-              <input
-                id="username"
-                type="text"
-                className={styles.input}
-                placeholder="Seu nome de usuário"
-                value={user}
-                onChange={(e) => setUser(e.target.value)}
-                autoComplete="username"
-                disabled={loading}
-              />
-            </div>
-          </div>
-
-          <div className={styles.fieldGroup}>
-            <label className={styles.label} htmlFor="password">
-              Senha
-            </label>
-            <div className={styles.inputWrapper}>
-              <div className={styles.fieldIcon}>
-                <IconLock size={16} />
-              </div>
-              <input
-                id="password"
-                type="password"
-                className={styles.input}
-                placeholder="••••••••"
-                value={pass}
-                onChange={(e) => setPass(e.target.value)}
-                autoComplete="current-password"
-                disabled={loading}
-              />
-            </div>
-          </div>
-
-          <button
-            type="submit"
-            className={styles.submitBtn}
-            disabled={loading}
-          >
-            {loading ? (
-              <>
-                <IconSpinner size={16} />
-                <span>Autenticando...</span>
-              </>
-            ) : (
-              'Entrar'
-            )}
-          </button>
-        </form>
-
-        <div className={styles.cardFooter}>
-          <p className={styles.footerText}>
-            Não possui uma conta?{' '}
-            <Link to="/register" className={styles.link}>
-              Cadastre-se gratuitamente
-            </Link>
-          </p>
-        </div>
-      </div>
-    </div>
-  );
+    )
 }
 
 export default Login;
