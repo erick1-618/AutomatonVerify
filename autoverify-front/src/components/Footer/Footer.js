@@ -14,7 +14,7 @@ function Footer() {
                 <p>Entre em contato:</p>
                 <div className={styles.ctt}>
                     <img src={linkedinIcon} alt="Linkedin" className={styles.icon}></img>
-                    <a href="https://www.linkedin.com/in/erick1618/" target="_blank" rel="noreferrer">linkedin.com/in/erick-andrade-3024a5333/</a>
+                    <a href="https://www.linkedin.com/in/erick1618/" target="_blank" rel="noreferrer">linkedin.com/in/erick1618/</a>
                 </div>
                 <div className={styles.ctt}>
                     <img className={styles.icon} alt="Mail" src={mailIcon}></img>
