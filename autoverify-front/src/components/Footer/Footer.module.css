@@ -1,47 +1,92 @@
-footer {
-    background: linear-gradient(to right, #142933, #637B87);
-    color: white;
-    height: 120px;
-    width: 100vw;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
+.footer {
+  width: 100%;
+  margin-top: auto;
+  background-color: var(--bg-surface);
+  border-top: 1px solid var(--border-subtle);
+  padding: 40px 0 32px 0;
+}
+
+.footerContainer {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 32px;
 }
 
 .leftGroup {
-    left: 0px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    font-family: 'Hank Grotesk', sans-serif;
-    font-weight: lighter;
-    color: white;
-    font-size: 13px;
-    top: 0px;
-    letter-spacing: 2px;
-    margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 480px;
+}
+
+.brandBadge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.tagline {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.copyright {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 4px;
 }
 
 .rightGroup {
-    display: flex;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contactTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.contactLinks {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.contactItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-canvas);
+  border: 1px solid var(--border-subtle);
+  transition: all var(--transition-fast);
+}
+
+.contactItem:hover {
+  color: var(--text-primary);
+  border-color: var(--border-default);
+  background: var(--bg-surface-elevated);
+}
+
+@media (max-width: 768px) {
+  .footerContainer {
     flex-direction: column;
-    font-family: 'Hank Grotesk', sans-serif;
-    font-weight: lighter;
-    color: white;
-    font-size: 13px;
-    letter-spacing: 2px;
-    margin-top: 15px;
-}
-
-.ctt {
-    margin-top: 10px;
-    display: flex;
-    flex-direction: row;
-}
-
-.icon {
-    height: 20px;
-    width: 20px;
-    margin-right: 10px;
+    gap: 24px;
+  }
 }

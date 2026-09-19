@@ -1,128 +1,191 @@
-import style from './CreateTitle.module.css';
-import createImg from '../../assets/icons/create.png'
-import logotype from '../../assets/icons/logotype.png'
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom'
-import loadingGif from '../../assets/loading2.gif'
+import React, { useState } from 'react';
+import styles from './CreateTitle.module.css';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { expire } from '../../redux/expireSlice';
 import { API_URL } from '../../services/api';
+import { useToast } from '../../components/Common/Toast';
+import { Dropzone } from '../../components/Common/Dropzone';
+import { IconPlus, IconSpinner, IconFileCode } from '../../components/Common/Icons';
 
 function CreateTitle() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { showToast } = useToast();
 
-    const navigate = useNavigate();
+  const [name, setName] = useState('');
+  const [desc, setDesc] = useState('');
+  const [file, setFile] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-    const dispatch = useDispatch();
+  function handleSubmit(e) {
+    e.preventDefault();
 
-    const [name, setName] = useState('');
-    const [desc, setDesc] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [result, setResult] = useState(null);
+    const token = localStorage.getItem('token');
 
-    function handleSubmit() {
-
-        const token = localStorage.getItem("token");        
-
-        const file = document.getElementById("file").files[0];
-
-        if (file.size > 50 * 1024 * 1024) { // maior que 5MB
-            alert("Arquivo muito grande! Máximo de 50MB");
-            return;
-        }
-
-        if(name === '' || desc === ''){
-            alert("Preencha todos os campos obrigatórios");
-            return;
-        }
-
-        if(!file) {
-            alert("Selecione o arquivo para criar o seu título");
-            return
-        }
-
-        setLoading(true)
-
-        const details = {titleName: name, titleDescription: desc};
-
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("details", new Blob(
-            [JSON.stringify(details)],
-            { type: "application/json" }
-        ));
-
-        fetch(`${API_URL}/title`, {
-            method: "POST",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-            body: formData
-        }).then((res) => {
-            if(res.status === 413){
-                throw new Error("Tamanho máximo: 50MB")
-            }
-            if(res.status === 403){
-                dispatch(expire())
-            }
-            setResult(res.status);
-        }).catch(err => alert(err.message)).finally(() => {
-            setLoading(false)
-        });
+    if (!name.trim()) {
+      showToast('O nome do título é obrigatório.', 'error');
+      return;
     }
 
-    if(result) return ( 
-        <div className={style.itemWrapper}>
-            {result === 200 ?
-            <>
-                <div className={style.msgWrapper}>
-                    <p className={style.msg}>Título criado com sucesso!</p>
-                    <img alt='logo' className={style.logotype} src={logotype}></img>
-                </div>
-            </>
-            : 
-            <p className={style.result}>Já existe um título com este conteúdo!</p>
-            }
-        <button onClick={() => navigate('/home')} className={style.backBtn}>Voltar para a página inicial</button>
+    if (!desc.trim()) {
+      showToast('Por favor, informe uma descrição para o título.', 'error');
+      return;
+    }
+
+    if (!file) {
+      showToast('Selecione o arquivo correspondente para gerar o hash inicial.', 'error');
+      return;
+    }
+
+    if (file.size > 50 * 1024 * 1024) {
+      showToast('O arquivo excede o limite máximo permitido de 50MB.', 'error');
+      return;
+    }
+
+    setLoading(true);
+
+    const details = { titleName: name.trim(), titleDescription: desc.trim() };
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append(
+      'details',
+      new Blob([JSON.stringify(details)], { type: 'application/json' })
+    );
+
+    fetch(`${API_URL}/title`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    })
+      .then((res) => {
+        if (res.status === 413) {
+          throw new Error('Arquivo muito grande (máximo 50MB).');
+        }
+        if (res.status === 403) {
+          dispatch(expire());
+          throw new Error('Sessão expirada. Faça login novamente.');
+        }
+        if (!res.ok) {
+          throw new Error('Não foi possível cadastrar o título.');
+        }
+        return res.json();
+      })
+      .then((data) => {
+        showToast('Título publicado com sucesso!', 'success');
+        navigate(`/title/${data.id}`);
+      })
+      .catch((err) => {
+        showToast(err.message || 'Erro inesperado ao criar título.', 'error');
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }
+
+  return (
+    <div className="page-container">
+      <div className={styles.createWrapper}>
+        <div className={styles.cardHeader}>
+          <div className={styles.iconBadge}>
+            <IconFileCode size={24} />
+          </div>
+          <h1 className={styles.heading}>Publicar Novo Título</h1>
+          <p className={styles.subheading}>
+            Registre a assinatura digital do seu software na base pública utilizando autômatos celulares
+          </p>
         </div>
-    )
 
-    if(loading) return (
-        <div className={style.itemWrapper}>
-            <p className={style.boxName}>Criando título...</p>
-            <img alt='loading' src={loadingGif} className={style.loader}></img>
-        </div>)
-
-    return (
-        <div className={style.page}>
-            <img className={style.logo} alt="logo" src={createImg}></img>
-            <div className={style.wrapper}>
-                <div className={style.box}>
-
-                    <p className={style.boxName}>Criação de Títulos</p>
-
-                    <div className={style.field}>
-                        <p className={style.fieldName}>Nome (Máximo de 50 caracteres)</p>
-                        <textarea value={name} onChange={(e) => {
-                            const value = e.target.value;
-                            if(value.length < 50) setName(value);
-                        }} className={style.fieldContent}></textarea>
-                    </div>
-
-                    <div className={style.field}>
-                        <p className={style.fieldName}>Decrição (Máximo de 400 caracteres)</p>
-                        <textarea value={desc} onChange={(e) => {
-                            const value = e.target.value;
-                            if(value.length < 400) setDesc(value);
-                        }} className={style.desc}></textarea>
-                    </div>
-
-                    <input id='file' type='file' className={style.file}></input>
-
-                    <button onClick={handleSubmit} className={style.btn}>Criar título</button>
-                </div>
+        <form onSubmit={handleSubmit} className={styles.formCard}>
+          {/* Title Name Field */}
+          <div className={styles.fieldGroup}>
+            <div className={styles.labelRow}>
+              <label className={styles.label} htmlFor="title-name">
+                Nome do Título / Software
+              </label>
+              <span className={styles.charCount}>{name.length}/100</span>
             </div>
-        </div>
-    )
+            <input
+              id="title-name"
+              type="text"
+              className={styles.input}
+              placeholder="Ex: MinhaAplicacao-v1.0.0-linux-x64.tar.gz"
+              value={name}
+              maxLength={100}
+              onChange={(e) => setName(e.target.value)}
+              disabled={loading}
+            />
+          </div>
+
+          {/* Description Field */}
+          <div className={styles.fieldGroup}>
+            <div className={styles.labelRow}>
+              <label className={styles.label} htmlFor="title-desc">
+                Descrição e Notas de Auditoria
+              </label>
+              <span className={styles.charCount}>{desc.length}/1000</span>
+            </div>
+            <textarea
+              id="title-desc"
+              className={styles.textarea}
+              rows={5}
+              placeholder="Descreva a finalidade deste arquivo, versão de lançamento, ambiente de compilação ou quaisquer instruções relevantes para quem for verificar..."
+              value={desc}
+              maxLength={1000}
+              onChange={(e) => setDesc(e.target.value)}
+              disabled={loading}
+            />
+          </div>
+
+          {/* File Upload Zone */}
+          <div className={styles.fieldGroup}>
+            <label className={styles.label}>
+              Arquivo de Referência (Máx. 50MB)
+            </label>
+            <Dropzone
+              file={file}
+              onFileSelect={setFile}
+              label="Arraste o arquivo original aqui ou clique para selecionar"
+              maxSizeMB={50}
+            />
+          </div>
+
+          {/* Submit Action */}
+          <div className={styles.actionsRow}>
+            <button
+              type="button"
+              className={styles.cancelBtn}
+              onClick={() => navigate(-1)}
+              disabled={loading}
+            >
+              Cancelar
+            </button>
+
+            <button
+              type="submit"
+              className={styles.submitBtn}
+              disabled={loading}
+            >
+              {loading ? (
+                <>
+                  <IconSpinner size={18} />
+                  <span>Calculando assinatura e enviando...</span>
+                </>
+              ) : (
+                <>
+                  <IconPlus size={18} />
+                  <span>Publicar Título</span>
+                </>
+              )}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
 }
 
 export default CreateTitle;

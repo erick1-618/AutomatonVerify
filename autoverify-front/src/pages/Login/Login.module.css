@@ -1,84 +1,155 @@
-.login {
-    flex:1;
-    width: 100vw;
-    background: linear-gradient(to bottom, #334e5c, #6ca4c2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.loginWrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 20px;
 }
 
-.form {
-    font-family: 'Hank Grotesk', sans-serif;
-    border-radius: 25px;
-    margin-top: 10%;
-    margin-bottom: 10%;
-    background: #f4f4f4;
-    width: 445px;
-    height: 445px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    filter: drop-shadow(4px 4px 6px rgba(0, 0, 0, 0.4));
+.loginCard {
+  width: 100%;
+  max-width: 420px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-xl);
+  padding: 36px 32px;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+}
+
+.cardHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.logoBadge {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: var(--accent-light);
+  color: var(--accent-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
 }
 
 .title {
-    margin-left: 10%;
-    margin-right: 10%;
-    margin-top: 5%;
-    font-weight: bolder;
-    text-align: center;
-    font-size: 25px;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 6px;
 }
 
-.user {
-    font-size: 20px;
-    letter-spacing: 1px;
-    display: flex;
-    flex-direction: column;
-    margin-top: 15px;
-    width: 90%;
+.subtitle {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
 }
 
-.pass {
-    font-size: 20px;
-    letter-spacing: 1px;
-    display: flex;
-    flex-direction: column;
-    margin-top: 20px;
-    width: 90%;
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.submit {
-    cursor: pointer;
-    letter-spacing: 1px;
-    font-weight: bolder;
-    font-size: 15px;
-    margin-top: 30px;
-    border-radius: 15px;
-    border:0;
-    width: 50%;
-    height: 35px;
-    background: #254e60;
-    color: white;
-    filter: drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.4));
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-.submit:hover {
-    background: #447b93;
+.label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
 }
 
-.field {
-    font-size: 20px;
-    padding-left: 10px;
-    border: 0;
-    border-radius: 10px;
-    margin-top: 5x;
-    height: 35px;
-    filter: drop-shadow(1px 4px 3px rgba(0, 0, 0, 0.4));
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
-.logo {
-    margin-top: 5px;
-    width: 150px;
-    filter: drop-shadow(1px 4px 3px rgba(0, 0, 0, 0.4));
+.fieldIcon {
+  position: absolute;
+  left: 14px;
+  color: var(--text-muted);
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+}
+
+.input {
+  width: 100%;
+  padding: 12px 14px 12px 42px;
+  background: var(--bg-canvas);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: 14px;
+  transition: all var(--transition-fast);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px var(--accent-light);
+}
+
+.input::placeholder {
+  color: var(--text-muted);
+}
+
+.submitBtn {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px;
+  border-radius: var(--radius-md);
+  background: var(--accent-primary);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 0 16px var(--accent-glow);
+  transition: all var(--transition-fast);
+}
+
+.submitBtn:hover:not(:disabled) {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.cardFooter {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-subtle);
+  text-align: center;
+}
+
+.footerText {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.link {
+  color: var(--accent-primary);
+  font-weight: 600;
+  transition: color var(--transition-fast);
+}
+
+.link:hover {
+  text-decoration: underline;
+  color: var(--accent-hover);
 }
