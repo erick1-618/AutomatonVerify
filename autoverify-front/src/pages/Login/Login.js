@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import {useDispatch} from 'react-redux'
 import {login} from '../../redux/authSlice'
 import { getUserName } from '../../utils/utilitaries';
+import { API_URL } from '../../services/api';
 
 function Login() {
 
@@ -20,7 +21,7 @@ function Login() {
         const loginCredentials = {userName: user, password: pass};
 
         try{
-            const response = await fetch('http://localhost:8080/auth/login', {
+            const response = await fetch(`${API_URL}/auth/login`, {
                 body: JSON.stringify(loginCredentials),
                 method: "POST",
                 headers: {"Content-Type": "application/json"}

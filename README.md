@@ -6,93 +6,134 @@
 
 <p align="center">Site para armazenamento eficiente de propriedades de software com base em autômatos celulares para funções hash.</p>
 
-<h3>
-  <img src="assets/loading.gif" width="20" height="20" style="vertical-align: middle;"> Funcionalidades
-</h3>
+### Funcionalidades
 
 - Criação de títulos (arquivos) públicos para armazenamento de hashes
 - Verificação de integridade de títulos registrados com base nos hashes
 - Barra de pesquisa para busca
 - Favoritar títulos para fácil acesso
 
-<h3>
-  <img src="assets/loading.gif" width="20" height="20" style="vertical-align: middle;"> Tecnologias Utilizadas
-</h3>
+### Stack
 
-- Frontend
-    - React
-    - CSS Modules (modular)
-    - Redux
-- Backend
-    - Spring Boot
-    - Spring Security
-    - Maven
-    - Hibernate
-- Persistência
-    - PostgreSQL
-- Outros
-    - Docker
-    - Figma para prototipação de telas
-    - JWT para autenticação de usuários
+- **Frontend**:
+  - [React](https://react.dev/)
+  - [Redux Toolkit](https://redux-toolkit.js.org/)
+  - [React Router](https://reactrouter.com/)
+  - CSS Modules
+  - Hosting: [Vercel](https://vercel.com/)
+- **Backend**:
+  - [Java 21](https://www.oracle.com/java/) / [Spring Boot](https://spring.io/projects/spring-boot)
+  - Spring Security & JWT
+  - Hibernate & Spring Data JPA
+  - Hosting: [VPS Oracle Cloud (Always Free)](https://www.oracle.com/cloud/free/)
+- **Database**:
+  - [PostgreSQL](https://www.postgresql.org/)
+- **DevOps & Infra**:
+  - [Docker](https://www.docker.com/) & [Docker Compose](https://docs.docker.com/compose/)
+  - [GitHub Actions](https://github.com/features/actions) (CI/CD)
+  - [GitHub Container Registry (GHCR)](https://github.com/features/packages)
 
-<h3>
-  <img src="assets/loading.gif" width="20" height="20" style="vertical-align: middle;"> Instalação e Execução
-</h3>
+---
 
-Pré-requisito: Docker (versão mínima 20.x)
+### Arquitetura de Deploy
 
-1. Clone este repositório em seu ambiente
+A arquitetura segue o mesmo fluxo desacoplado:
+1. **Frontend (Vercel)**:
+   - Deployado diretamente na Vercel como Single Page Application.
+   - Comunica-se com o backend via variável de ambiente `REACT_APP_API_URL`.
+   - Gerencia rotas SPA através do `vercel.json` (rewrites para `/index.html`).
+2. **Backend & Database (VPS Oracle)**:
+   - Orquestrados via `docker-compose.yml`.
+   - O PostgreSQL persiste seus dados no volume nomeado `pgdata`.
+   - O backend Spring Boot consome a imagem `ghcr.io/erick1-618/automatonverify-backend:latest`.
+3. **CI/CD Automatizado (GitHub Actions)**:
+   - A cada `push` na branch `main` alterando `autoverify-api/**`:
+     1. Build da imagem Docker multi-plataforma (`linux/arm64` para processadores Ampere A1 da Oracle Cloud).
+     2. Push da imagem no GitHub Container Registry (`ghcr.io`).
+     3. Conexão SSH na VPS da Oracle para executar `docker compose pull && docker compose up -d --force-recreate`.
 
+---
+
+### Configuração de Deploy
+
+#### 1. Na VPS Oracle
+
+1. Conecte-se à sua máquina da Oracle e crie a pasta do projeto:
+   ```bash
+   mkdir -p ~/AutomatonVerify && cd ~/AutomatonVerify
+   ```
+2. Copie o `docker-compose.yml` e crie o arquivo `.env`:
+   ```bash
+   cp .env.example .env
+   # Edite as credenciais e variáveis
+   nano .env
+   ```
+3. Garanta que as portas necessárias estejam liberadas no firewall da VM e na **Security List** da Oracle Cloud (VCN Ingress Rules):
+   - Porta `8080` (API Spring Boot) ou porta `80`/`443` se utilizar um Reverse Proxy (NGINX/Caddy).
+
+#### 2. Segredos no GitHub Actions
+
+No repositório do GitHub, vá em **Settings** > **Secrets and variables** > **Actions** e cadastre as seguintes *Repository Secrets*:
+
+- `ORACLE_HOST`: Endereço IP público da sua máquina Oracle.
+- `ORACLE_USER`: Usuário SSH da VM (ex: `ubuntu` ou `opc`).
+- `ORACLE_SSH_KEY`: Sua chave privada SSH para acesso à máquina.
+
+#### 3. Na Vercel
+
+1. Importe o repositório na [Vercel](https://vercel.com/).
+2. Defina o **Root Directory** como:
+   ```text
+   autoverify-front
+   ```
+3. Em **Environment Variables**, adicione:
+   - `REACT_APP_API_URL`: URL pública da sua API na VPS Oracle (ex: `http://<IP_DA_ORACLE>:8080` ou `https://api.seudominio.com`).
+4. Realize o deploy.
+
+---
+
+### Execução Local para Desenvolvimento
+
+#### Executando apenas Backend e Banco via Docker:
 ```bash
-git clone https://github.com/erick1-618/AutomatonVerify
+docker compose up -d db backend
 ```
 
-2. Navegue até o diretório do projeto
-
+Para rodar o frontend localmente em modo de desenvolvimento:
 ```bash
-cd AutomatonVerify
+cd autoverify-front
+npm install
+npm start
 ```
 
-3. Crie o arquivo *.env* na raíz do projeto com base no template *.env.example* e edite-o com base em seu ambiente
-
+#### Executando toda a stack localmente com Docker Compose:
 ```bash
-cp .env.example .env
+docker compose --profile dev up --build
 ```
+Acesse `http://localhost:3000`.
 
-4. Faça o build com o docker compose
+---
 
-```bash
-docker compose up
-```
+### Estrutura do Projeto
 
-5. Em seu navegador acesse a porta 3000 para acessar o frontend.
-
-Exemplo: ``http://localhost:3000/``
-
-6. Para encerrar a execução do contêiner:
-
-```bash
-docker compose down
-```
-
-Para reiniciar o contêiner, reexecute o passo 3
-
-<h3>
-  <img src="assets/loading.gif" width="20" height="20" style="vertical-align: middle;"> Estrutura de pastas
-</h3>
-
-```bash
-project/
-├── autoverify-front/ # Código React
-├── autoverify-api/ # Código Spring Boot
-├── docker-compose.yml # Docker Compose
-├── .env.example # Modelo .env
+```text
+AutomatonVerify/
+├── .github/
+│   └── workflows/
+│       └── backend-deploy.yml    # CI/CD: build arm64, push GHCR e deploy SSH
+├── autoverify-api/               # API Spring Boot (Java 21)
+│   ├── Dockerfile
+│   └── src/
+├── autoverify-front/             # Frontend React
+│   ├── vercel.json               # Configuração SPA para Vercel
+│   ├── .env.example
+│   └── src/
+├── docker-compose.yml            # Orquestração de containers (db + backend)
+├── .env.example                  # Template de variáveis da VPS
 └── README.md
 ```
 
-<h3>
-  <img src="assets/loading.gif" width="20" height="20" style="vertical-align: middle;"> Licença
-</h3>
+### Licença
 
 Este projeto está licenciado sob a GNU General Public License v3.0 - veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 

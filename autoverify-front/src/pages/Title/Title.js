@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import loadingGif from '../../assets/loading.gif'
 import { useDispatch } from "react-redux";
 import { expire } from "../../redux/expireSlice";
+import { API_URL } from "../../services/api";
 
 function Title(){
 
@@ -27,7 +28,7 @@ function Title(){
 
         const token = localStorage.getItem("token")
 
-        fetch(`http://localhost:8080/title/${id}`, {
+        fetch(`${API_URL}/title/${id}`, {
             headers: {
                 Authorization: `Bearer ${token}`
             },
@@ -53,7 +54,7 @@ function Title(){
 
         const method = title.favorited ? "DELETE" : "POST";
 
-        fetch(`http://localhost:8080/title/${id}/favorite`, {
+        fetch(`${API_URL}/title/${id}/favorite`, {
                 method: method,
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -63,7 +64,7 @@ function Title(){
                 dispatch(expire())
                 throw new Error('Seção expirou')
             } 
-           return res.json()})
+            return res.json()})
         .then(data => {
             setTitle(data);
         }).catch((err) => {
@@ -86,7 +87,7 @@ function Title(){
 
         formData.append('file', file);
 
-        fetch(`http://localhost:8080/title/${id}`, {
+        fetch(`${API_URL}/title/${id}`, {
             headers: {
                 Authorization: `Bearer ${token}`
             },

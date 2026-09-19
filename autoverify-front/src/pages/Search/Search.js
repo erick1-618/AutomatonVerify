@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import TitleSearch from '../../components/Search/TitleSearch';
 import { useDispatch } from 'react-redux';
 import { expire } from '../../redux/expireSlice';
+import { API_URL } from '../../services/api';
 
 function Search() {
 
@@ -26,7 +27,7 @@ function Search() {
     useEffect(() => {
         const token = localStorage.getItem("token");
 
-        fetch(`http://localhost:8080/title/search/name?query=${query}&page=${page}`, {
+        fetch(`${API_URL}/title/search/name?query=${query}&page=${page}`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`

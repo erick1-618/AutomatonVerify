@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import loadingGif from '../../assets/loading2.gif'
 import { useDispatch } from 'react-redux';
 import { expire } from '../../redux/expireSlice';
+import { API_URL } from '../../services/api';
 
 function CreateTitle() {
 
@@ -50,7 +51,7 @@ function CreateTitle() {
             { type: "application/json" }
         ));
 
-        fetch("http://localhost:8080/title", {
+        fetch(`${API_URL}/title`, {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${token}`,

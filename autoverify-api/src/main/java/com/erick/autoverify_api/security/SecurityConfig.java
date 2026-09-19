@@ -1,8 +1,10 @@
 package com.erick.autoverify_api.security;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,6 +20,9 @@ import org.springframework.web.cors.CorsConfiguration;
 @EnableWebSecurity
 public class SecurityConfig {
 
+	@Value("${cors.allowed-origins:http://localhost:3000,https://*.vercel.app}")
+	private String allowedOrigins;
+
 	@Autowired
 	private JwtFilter jwtFilter;
 
@@ -26,9 +31,14 @@ public class SecurityConfig {
 		return http.csrf(csrf -> csrf.disable())
 				.cors(cors -> cors.configurationSource(request -> {
 	                CorsConfiguration config = new CorsConfiguration();
-	                config.setAllowedOrigins(List.of("http://localhost:3000")); // seu front
-	                config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-	                config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+	                List<String> origins = Arrays.stream(allowedOrigins.split(","))
+	                        .map(String::trim)
+	                        .filter(s -> !s.isEmpty())
+	                        .toList();
+	                config.setAllowedOriginPatterns(origins);
+	                config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH"));
+	                config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept", "X-Requested-With", "Origin"));
+	                config.setExposedHeaders(List.of("Authorization"));
 	                config.setAllowCredentials(true);
 	                return config;
 	            }))

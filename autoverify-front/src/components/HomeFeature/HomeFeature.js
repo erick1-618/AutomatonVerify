@@ -3,6 +3,7 @@ import style from "./HomeFeature.module.css";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { expire } from "../../redux/expireSlice";
+import { API_URL } from "../../services/api";
 
 function HomeFeature({name}) {
 
@@ -18,7 +19,7 @@ function HomeFeature({name}) {
         
         const token = localStorage.getItem("token");
         
-        fetch(`http://localhost:8080/title/${titlesForFetch}`, {
+        fetch(`${API_URL}/title/${titlesForFetch}`, {
             headers: {
                 Authorization: `Bearer ${token}`
             },

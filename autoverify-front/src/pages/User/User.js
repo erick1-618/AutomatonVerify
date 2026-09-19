@@ -8,6 +8,7 @@ import {useDispatch} from 'react-redux'
 import Modal from '../../components/Modal/Modal';
 import {logout} from '../../redux/authSlice'
 import { expire } from '../../redux/expireSlice';
+import { API_URL } from '../../services/api';
 
 function User() {
 
@@ -33,7 +34,7 @@ function User() {
         const token = localStorage.getItem("token");
         const path = myPage ? my ? `user/name/${name}` : 'favorites' : `user/name/${name}`;
 
-        fetch(`http://localhost:8080/title/${path}`, {
+        fetch(`${API_URL}/title/${path}`, {
             headers: {
                 Authorization: `Bearer ${token}`
             },
@@ -56,7 +57,7 @@ function User() {
     function handleUnfavorite(id) {
         const token = localStorage.getItem("token");
 
-        fetch(`http://localhost:8080/title/${id}/favorite`, {
+        fetch(`${API_URL}/title/${id}/favorite`, {
                 method: "DELETE",
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -74,7 +75,7 @@ function User() {
         action: () => {
             const token = localStorage.getItem("token");
 
-            fetch(`http://localhost:8080/title/${selectedTitle.id}`, {
+            fetch(`${API_URL}/title/${selectedTitle.id}`, {
                 method: "DELETE",
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -103,7 +104,7 @@ function User() {
         action: () => {
             const token = localStorage.getItem("token");
 
-            fetch(`http://localhost:8080/us`, {
+            fetch(`${API_URL}/us`, {
                 method: "DELETE",
                 headers: {
                     Authorization: `Bearer ${token}`
