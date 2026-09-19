@@ -24,6 +24,10 @@ function Search() {
 
     useEffect(() => {
         const token = localStorage.getItem("token");
+        if (!token) {
+            setLoading(false);
+            return;
+        }
         setLoading(true);
         setErrorMsg('');
 

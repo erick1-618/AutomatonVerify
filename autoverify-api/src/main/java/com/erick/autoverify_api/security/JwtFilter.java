@@ -32,23 +32,26 @@ public class JwtFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        String authHeader = request.getHeader("Authorization");
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        String token = authHeader.substring(7);
-        String name = jwtService.extractName(token);
-
-        User user = userRepository.findByName(name).orElse(null);
-        if (user != null && jwtService.isTokenValid(token, user)) {
-            UsernamePasswordAuthenticationToken auth =
-                new UsernamePasswordAuthenticationToken(user, null, List.of());
-            SecurityContextHolder.getContext().setAuthentication(auth);
+        try {
+            String authHeader = request.getHeader("Authorization");
+            if (authHeader != null && authHeader.startsWith("Bearer ")) {
+                String token = authHeader.substring(7).trim();
+                if (!token.isEmpty() && !"null".equalsIgnoreCase(token) && !"undefined".equalsIgnoreCase(token)) {
+                    String name = jwtService.extractName(token);
+                    if (name != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                        User user = userRepository.findByName(name).orElse(null);
+                        if (user != null && jwtService.isTokenValid(token, user)) {
+                            UsernamePasswordAuthenticationToken auth =
+                                new UsernamePasswordAuthenticationToken(user, null, List.of());
+                            SecurityContextHolder.getContext().setAuthentication(auth);
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // Keep chain moving safely without crashing on invalid/expired token
         }
 
         filterChain.doFilter(request, response);
     }
 }
-

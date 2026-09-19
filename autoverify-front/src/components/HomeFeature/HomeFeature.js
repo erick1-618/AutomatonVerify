@@ -18,6 +18,10 @@ function HomeFeature({name}) {
     useEffect(() => {
         
         const token = localStorage.getItem("token");
+        if (!token) {
+            setLoading(false);
+            return;
+        }
         
         fetch(`${API_URL}/title/${titlesForFetch}`, {
             headers: {

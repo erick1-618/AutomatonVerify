@@ -29,6 +29,10 @@ function User() {
 
     useEffect(() => {
         const token = localStorage.getItem("token");
+        if (!token) {
+            setLoading(false);
+            return;
+        }
         const path = myPage ? (my ? `user/name/${name}` : 'favorites') : `user/name/${name}`;
         setLoading(true);
         setErrorMsg('');
