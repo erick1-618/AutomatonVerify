@@ -27,7 +27,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
       CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
 
-  # Serviço para execução local opcional (na Oracle VPS o frontend roda na Vercel)
+  # Serviço para execução local opcional
   frontend:
     build: ./autoverify-front
     container_name: frontend
