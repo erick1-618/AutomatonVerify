@@ -17,7 +17,7 @@ public class JwtService {
 
 	private static final String SECRET = "AutomatosCelularesSãoIncríveis:D";
 
-	@Value("${jwt.expiration-hours:168}")
+	@Value("${jwt.expiration-hours}")
 	private long expirationHours;
 
 	public String generateToken(String userName) {

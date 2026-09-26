@@ -20,7 +20,7 @@ import org.springframework.web.cors.CorsConfiguration;
 @EnableWebSecurity
 public class SecurityConfig {
 
-	@Value("${cors.allowed-origins:http://localhost:3000,https://*.vercel.app}")
+	@Value("${cors.allowed-origins}")
 	private String allowedOrigins;
 
 	@Autowired
