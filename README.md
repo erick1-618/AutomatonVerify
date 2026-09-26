@@ -6,6 +6,10 @@
 
 <p align="center">Site para armazenamento eficiente de propriedades de software com base em autômatos celulares para funções hash.</p>
 
+<p align="center">
+  🌐 <strong>Acesse o projeto online:</strong> <a href="https://autov.erickborba.dev.br" target="_blank">https://autov.erickborba.dev.br</a>
+</p>
+
 ### Funcionalidades
 
 - Criação de títulos (arquivos) públicos para armazenamento de hashes
@@ -20,7 +24,7 @@
   - [Redux Toolkit](https://redux-toolkit.js.org/)
   - [React Router](https://reactrouter.com/)
   - CSS Modules
-  - Hosting: [Vercel](https://vercel.com/)
+  - Hosting: [Vercel](https://vercel.com/) ([autov.erickborba.dev.br](https://autov.erickborba.dev.br))
 - **Backend**:
   - [Java 21](https://www.oracle.com/java/) / [Spring Boot](https://spring.io/projects/spring-boot)
   - Spring Security & JWT
