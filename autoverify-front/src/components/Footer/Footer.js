@@ -18,7 +18,7 @@ function Footer() {
                 </div>
                 <div className={styles.ctt}>
                     <img className={styles.icon} alt="Mail" src={mailIcon}></img>
-                    <a href="mailto:erickcefetbcc@gmail.com">erickcefetbcc@gmail.com</a>
+                    <a href="mailto:contato@erickborba.dev.br">contato@erickborba.dev.br</a>
                 </div>
             </div>
        </footer>
